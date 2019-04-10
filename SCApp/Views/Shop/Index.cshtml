@@ -1,0 +1,53 @@
+﻿@model IEnumerable<SCApp.ViewModels.ItemListViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Shop</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Item
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Price
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a href="#" class="add-link" data-id="@item.Id">AddToCart</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script type="text/javascript">
+
+    $(function () {
+        $(".add-link").click(function () {
+            $.post("/shop/addtocart", { "itemId": $(this).attr("data-id") })
+                .done(function () { alert("Item added to cart") })
+                .fail(function () { alert("Error") });
+        })
+    });
+
+</script>
