@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using SCApp.EntityModels;
+﻿using SCApp.EntityModels;
 using SCApp.Persistance;
+using SCApp.Services;
+using System.Data.Entity;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SCApp.Controllers
 {
     public class ItemsController : Controller
     {
         private ShopDbContext db = new ShopDbContext();
+        private ItemService _ItemService = new ItemService();
 
         // GET: Items
         public async Task<ActionResult> Index()
@@ -30,6 +27,7 @@ namespace SCApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Item item = await db.Items.FindAsync(id);
             if (item == null)
             {
@@ -54,8 +52,7 @@ namespace SCApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Items.Add(item);
-                await db.SaveChangesAsync();
+                await _ItemService.AddItem(item);
                 return RedirectToAction("Index");
             }
 

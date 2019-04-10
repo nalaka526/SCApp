@@ -1,7 +1,8 @@
 ﻿using SCApp.Persistance;
+using SCApp.Services;
 using SCApp.ViewModels;
 using System;
-using System.Data.Entity;
+
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -11,54 +12,29 @@ namespace SCApp.Controllers
     public class ShopController : Controller
     {
         private ShopDbContext db = new ShopDbContext();
+        private ItemService _itemService = new ItemService();
+        private ShoppingCartService _shoppingCartService = new ShoppingCartService();
 
         // GET: Shop
         public async Task<ActionResult> Index()
         {
-            var items = db.Items.Include(i => i.Category)
-                                .Select(e => new ItemListViewModel
-                                {
-                                    Id = e.Id,
-                                    Name = e.Name,
-                                    CategoryName = e.Category.Name,
-                                    Price = e.Price
-                                }
-                                );
-
-            return View(await items.ToListAsync());
+            var items = await _itemService.GetAvailableItemsAsync();
+            return View(items);
         }
 
         // GET: Cart
         public async Task<ActionResult> Cart()
         {
             var cart = GetShoppingCart();
+
             return View(cart);
         }
 
-        public void AddToCart(int itemId, int quantity = 1)
+        public void AddToCart(int itemId)
         {
-            var item = db.Items.Where(e => e.Id == itemId).FirstOrDefault();
-
-            if (item == null)
-                throw new ArgumentException("Invalid item");
-
             var cart = GetShoppingCart();
 
-            var cartItem = cart.Items.Where(e => e.ItemId == itemId).FirstOrDefault();
-            if (cartItem != null)
-            {
-                cartItem.Quantity++;
-            }
-            else
-            {
-                cart.Items.Add(new ShoppingCartItemViewModel()
-                {
-                    ItemId = item.Id,
-                    ItemName = item.Name,
-                    Quantity = quantity,
-                    UnitPrice = item.Price
-                });
-            }
+            cart = _shoppingCartService.AddItemToCart(itemId, cart);
 
             UpdateShoppingCart(cart);
         }
@@ -67,16 +43,11 @@ namespace SCApp.Controllers
         {
             var cart = GetShoppingCart();
 
-            var cartItem = cart.Items.Where(e => e.ItemId == itemId).FirstOrDefault();
-
-            if (cartItem == null)
-                throw new ArgumentException("Invalid item");
-
-            cart.Items.Remove(cartItem);
+            _shoppingCartService.RemoveItemFromCart(itemId, ref cart);
 
             UpdateShoppingCart(cart);
 
-            return View("Cart", GetShoppingCart());
+            return RedirectToAction("Cart");
         }
 
         private void UpdateShoppingCart(ShoppingCartViewModel cart)
@@ -86,17 +57,14 @@ namespace SCApp.Controllers
 
         private ShoppingCartViewModel GetShoppingCart()
         {
-            ShoppingCartViewModel cart;
             if (Session["cart"] == null)
             {
-                cart = new ShoppingCartViewModel();
+                return new ShoppingCartViewModel();
             }
             else
             {
-                cart = (ShoppingCartViewModel)Session["cart"];
+                return (ShoppingCartViewModel)Session["cart"];
             }
-
-            return cart;
         }
     }
 }
