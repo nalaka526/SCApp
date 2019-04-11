@@ -44,17 +44,6 @@ namespace SCApp.Controllers
             UpdateShoppingCart(cart);
         }
 
-        public async Task<ActionResult> RemoveFromCart(int itemId)
-        {
-            var cart = GetShoppingCart();
-
-            _shoppingCartService.RemoveItemFromCart(itemId, ref cart);
-
-            UpdateShoppingCart(cart);
-
-            return RedirectToAction("Cart");
-        }
-
         public void RemoveItem(int itemId)
         {
             var cart = GetShoppingCart();

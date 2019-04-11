@@ -1,56 +1,56 @@
 ﻿@model SCApp.ViewModels.ShoppingCartViewModel
+<div id="divCart">
+    @if (Model.Items.Any())
+    {
 
-@if (Model.Items.Any())
-{
-
-    <table class="table">
-        <tr>
-            <th>
-                Item
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Quantity
-            </th>
-            <th>
-                Total
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model.Items)
-        {
+        <table class="table">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UnitPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Quantity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LineTotal)
-                </td>
-                <td>
-                    <a href="#" class="remove-link" data-id="@item.ItemId">Remove</a>
-                </td>
+                <th>
+                    Item
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Total
+                </th>
+                <th></th>
             </tr>
-        }
 
-    </table>
-}
-else
-{
-    <div>No items in cart</div>
-}
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LineTotal)
+                    </td>
+                    <td>
+                        <a href="#" class="remove-link" data-id="@item.ItemId">Remove</a>
+                    </td>
+                </tr>
+            }
 
-<div>Total : <span><b>@Model.Total</b></span></div>
+        </table>
+    }
+    else
+    {
+        <div>No items in cart</div>
+    }
 
-<script type="text/javascript">
+    <div>Total : <span><b>@Model.Total</b></span></div>
+
+    <script type="text/javascript">
 
         $(function () {
             $(".remove-link").click(function () {
@@ -63,6 +63,6 @@ else
             })
         });
 
-</script>
-
+    </script>
+</div>
 
