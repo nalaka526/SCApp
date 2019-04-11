@@ -25,9 +25,14 @@ namespace SCApp.Controllers
         // GET: Cart
         public async Task<ActionResult> Cart()
         {
+            return View();
+        }
+
+        public async Task<ActionResult> CartPartial()
+        {
             var cart = GetShoppingCart();
 
-            return View(cart);
+            return PartialView("_cartPartial", cart);
         }
 
         public void AddToCart(int itemId)
@@ -48,6 +53,15 @@ namespace SCApp.Controllers
             UpdateShoppingCart(cart);
 
             return RedirectToAction("Cart");
+        }
+
+        public void RemoveItem(int itemId)
+        {
+            var cart = GetShoppingCart();
+
+            _shoppingCartService.RemoveItemFromCart(itemId, ref cart);
+
+            UpdateShoppingCart(cart);
         }
 
         private void UpdateShoppingCart(ShoppingCartViewModel cart)
