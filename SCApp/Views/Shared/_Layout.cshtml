@@ -9,18 +9,16 @@
     @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 @Html.ActionLink("Shopping Site", "Index", "Shop", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="navbar-nav">
                     <li>@Html.ActionLink("Shop", "Index", "Shop")</li>
                     <li>@Html.ActionLink("Shoppng Cart", "Cart", "Shop")</li>
                     <li>@Html.ActionLink("Items", "Index", "Items")</li>
@@ -28,13 +26,11 @@
                 @*@Html.Partial("_LoginPartial")*@
             </div>
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            
-        </footer>
+        <footer></footer>
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")
